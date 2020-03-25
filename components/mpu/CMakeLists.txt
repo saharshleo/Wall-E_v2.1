@@ -10,4 +10,4 @@ idf_component_register(SRCS "mpu.c"
                                 mqtt newlib nghttp nvs_flash openssl partition_table
                                 protobuf-c protocomm pthread sdmmc soc spiffs spi_flash
                                 sra18 tcpip_adapter tcp_transport ulp unity vfs wear_levelling
-                                wifi_provisioning wpa_supplicant xtensa)
+                                wifi_provisioning wpa_supplicant xtensa logger)
