@@ -3,7 +3,8 @@
 
 int setpoint = 0;
 int initial_acce_angle = 0;
-float pitch_angle = 0,roll_angle = 0;
+float pitch_angle = 0;
+float roll_angle = 0;
 
 void mpu_task(void *arg)
 {
@@ -16,20 +17,16 @@ void mpu_task(void *arg)
     i2c_master_init();  //Initialise the I2C interface
     start_mpu();        //Intialise the MPU 
     
-    while(1)
+    while(true)
     {
-
       //Calculate yaw and pitch angles
-      calculate_angle(acce_rd,gyro_rd,acce_raw_value,gyro_raw_value,initial_acce_angle,&roll_angle,&pitch_angle);  //Function to calculate pitch angle based on intial accelerometer angle
-      printf("ROLL ANGLE %f\t", roll_angle);
-      printf("PITCH ANGLE %f\n",pitch_angle);
-       
+      calculate_angle(acce_rd, gyro_rd, acce_raw_value, gyro_raw_value, initial_acce_angle, &roll_angle, &pitch_angle);  //Function to calculate pitch angle based on intial accelerometer angle
+      logD(TAG_MPU, "ROLL ANGLE %f\tPITCH ANGLE %f", roll_angle, pitch_angle); 
     }   
-
 }
 
 void app_main()
 {
-  xTaskCreate(mpu_task,"mpu_task",4096,NULL,1,NULL);
+  xTaskCreate(mpu_task, "mpu_task", 4096, NULL, 1, NULL);
 }
 

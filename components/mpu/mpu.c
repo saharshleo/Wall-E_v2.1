@@ -186,7 +186,7 @@ void start_mpu()
 
 
 //Calculate roll and pitch angles of the MPU after applying the complimentary filter
-void calculate_angle(uint8_t* acce_rd ,uint8_t* gyro_rd,int16_t* acce_raw_value,int16_t* gyro_raw_value, float initial_acce_angle,float *roll_angle,float *pitch_angle)
+void calculate_angle(uint8_t* acce_rd , uint8_t* gyro_rd, int16_t* acce_raw_value, int16_t* gyro_raw_value, float initial_acce_angle, float *roll_angle, float *pitch_angle)
 {
 
     /*Read raw gyro values*/
@@ -198,7 +198,7 @@ void calculate_angle(uint8_t* acce_rd ,uint8_t* gyro_rd,int16_t* acce_raw_value,
     shift_buf(acce_rd, acce_raw_value, BUFF_SIZE/2);
 
     //Get pitch angle using complimentary filter
-    complimentary_filter(acce_raw_value, gyro_raw_value, complimentary_angle, BUFF_SIZE/2,initial_acce_angle);
+    complimentary_filter(acce_raw_value, gyro_raw_value, complimentary_angle, BUFF_SIZE/2, initial_acce_angle);
     
     *roll_angle = complimentary_angle[0];
     *pitch_angle = complimentary_angle[1];

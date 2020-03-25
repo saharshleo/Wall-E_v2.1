@@ -8,22 +8,22 @@
 //Components
 #include "sra18.h"
 
+static const char *TAG_SWITCH_BOT = "switch_controlled_bot"
+
 void drive_task(void *arg)
 {
 
 	enable_buttons();	//Enable the buttons connected to GPIO 2 and GPIO 5
 	mcpwm_initialize();	//Initialize PWM to control speed of motors
 
-	while(1)
+	while(true)
 	{
-
 		/*
 			Make the Bot go forward, at a PWM of 80 if button 1 is pressed
 		*/
 		if(pressed_switch(BUTTON_1))
-		{
-			
-			printf("%s\n","BOT FORWARD");
+		{	
+			logD(TAG_SWITCH_BOT, "%s", "BOT FORWARD");
 
 			bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, 80, 80);	
 		}
@@ -33,8 +33,7 @@ void drive_task(void *arg)
 		*/
 		else if(pressed_switch(BUTTON_2))
 		{
-			
-			printf("%s\n","BOT BACKWARD");  
+			logD(TAG_SWITCH_BOT, "%s", "BOT BACKWARD");  
 
 			bot_backward(MCPWM_UNIT_0, MCPWM_TIMER_0, 80, 80);	//Make the Bot go backward, at a PWM of 80 if button 2 is pressed
 		}
@@ -42,16 +41,14 @@ void drive_task(void *arg)
 		/*
 			If no buttons are pressed, stop the bot
 		*/
-
 	   	else 
 		{
 			bot_stop(MCPWM_UNIT_0, MCPWM_TIMER_0);
-			printf("%s\n","BOT STOPPED");
+			logD(TAG_SWITCH_BOT, "%s", "BOT STOPPED");
 		}
 
 		vTaskDelay(100 / 10);
 	}
-	
 }
 
 void app_main()
@@ -59,5 +56,5 @@ void app_main()
 	/*
 		Basic Function for task creation
 	*/
-    xTaskCreate(&drive_task,"drive_task",4096,NULL,1,NULL);
+    xTaskCreate(&drive_task, "drive_task", 4096, NULL, 1, NULL);
 }

@@ -1,11 +1,15 @@
 #include "sra18.h"
 #include "mpu.h"
 
+static const char *TAG_ACCE_GYRO = "acce_and_gyro_graphs";
+
 float acce_angle = 0;
-float gyro_rate=0,gyro_angle =0;
+float gyro_rate = 0;
+float gyro_angle = 0;
 static float counter = 0;
 static uint32_t timer = 0;
 static float dt = 0;
+
 void app_main()
 {
   uint8_t* acce_rd = (uint8_t*) malloc(BUFF_SIZE);
@@ -15,15 +19,14 @@ void app_main()
 
   i2c_master_init();  //Initialise the I2C interface
   start_mpu();        //Intialise the MPU 
-  int ret;
   enable_buttons();
-
+  
+  int ret;
   int flag = 1;
   timer = msec();
 
-  while(1)
+  while(true)
   {
-
     dt = (float) (msec() - timer) / 1000000;
     timer = msec();
 
@@ -32,7 +35,6 @@ void app_main()
 
     ret = mpu6050_read_gyro(I2C_MASTER_NUM, gyro_rd, BUFF_SIZE);
     shift_buf(gyro_rd, gyro_raw_value, BUFF_SIZE/2);
-
 
     acce_angle = (atan2(-(acce_raw_value[0]), acce_raw_value[2]) * RAD_TO_DEG);
 
@@ -50,11 +52,11 @@ void app_main()
 
     if(flag == 0)
     {
-      printf("%f\n",acce_angle);
+      logD(TAG_ACCE_GYRO, "%f", acce_angle);
     }
     else 
     {
-      printf("%f\n",gyro_angle);
+      logD(TAG_ACCE_GYRO, "%f", gyro_angle);
     }
   }
 }

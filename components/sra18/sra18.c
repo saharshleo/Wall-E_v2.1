@@ -27,27 +27,29 @@ SOFTWARE.
 static const char* TAG_SRA = "sra";
 
 //Functions for custom adjustments
-float map(float x, float min_in, float max_in, float min_out, float max_out)
+float constrain(float reading, float lower_limit, float higher_limit)
 {
-    return (x - min_in) * (max_out - min_out) / (max_in - min_in) + min_out;
+    if(reading < lower_limit)
+        reading = lower_limit;
+    
+    else if(reading > higher_limit)
+        reading = higher_limit;
+
+    return reading;
 }
 
-float constrain(float x, float lower_limit, float higher_limit)
+float map(float reading, float input_start, float input_end, float output_start, float output_end)
 {
-    if(x < lower_limit)
-        x = lower_limit;
-    
-    else if(x > higher_limit)
-        x = higher_limit;
-
-    return x;
+    float result = (reading - input_start) * (output_end - output_start) / (input_end - input_start) + output_start;
+    result = constrain(result, output_start, output_end);
+    return result;
 }
 
 float absolute(float number)
 {
     if(number < 0)
     {
-        return (-1)*number;
+        return (-1) * number;
     }
 
     return number;
@@ -73,7 +75,7 @@ int pressed_switch(int button_num)
 {
     adc1_config_width(ADC_WIDTH_BIT_12);
     
-    for(int i = 0;i < 4;i++)
+    for(int i = 0; i < 4; i++)
     {
       adc1_config_channel_atten(channel[i], ADC_ATTEN_11db);
     }

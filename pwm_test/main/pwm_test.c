@@ -10,16 +10,13 @@
 
 void drive_task(void *arg)
 {
-
 	mcpwm_initialize();	//Initialize PWM to control speed of motors
 
-	while(1)
+	while(true)
 	{
-
 		/*
 			Make the Bot go forward & backward alternatively, at different PWM from 60 to 100
 		*/
-		
 		for(int i = 60; i <= 100; i++)
 		{
 			bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, i, i);
@@ -46,5 +43,5 @@ void app_main()
 	/*
 		Basic Function for task creation
 	*/
-    xTaskCreate(&drive_task,"drive_task",4096,NULL,1,NULL);
+    xTaskCreate(&drive_task, "drive_task", 4096, NULL, 1, NULL);
 }
